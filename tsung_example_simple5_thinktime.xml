@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/opt/local/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="notice">
+<!-- ======================================================================= -->
+<clients>
+	<client host="localhost" use_controller_vm="true" maxusers="3000"  weight="1"/>
+</clients>
+
+
+<!-- ======================================================================= -->
+<servers>
+		<server host="localhost" port="11080" type="tcp" weight="4" />
+     	<server host="localhost" port="11443" type="ssl" weight="1" /> 
+</servers>
+
+
+
+<!-- ======================================================================= -->
+<load loop="0">
+	<arrivalphase phase="1" duration="19" unit="second">
+		<users				  arrivalrate="3" unit="second"/>
+		<session_setup name="simpleHTTP"	probability="90"/>
+		<session_setup name="unkownURL"		probability="10"/>
+	</arrivalphase>
+</load>
+
+
+<!-- ======================================================================= -->
+<options>
+	<option type="ts_http" name="user_agent">
+		<user_agent probability="01">tsung</user_agent>
+		<user_agent probability="19">Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.0 (KHTML, like Gecko) Chrome/4.0.201.1 Safari/532.0</user_agent>
+		<user_agent probability="30">Mozilla/5.0 (Windows NT 10.0; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0</user_agent>
+		<user_agent probability="50">Mozilla/5.0 (IE 11.0; Windows NT 6.3; Trident/7.0; .NET4.0E; .NET4.0C; rv:11.0) like Gecko</user_agent>
+	</option>
+</options>
+
+
+<!-- ======================================================================= -->
+<sessions>
+	<session name="simpleHTTP" probability="0" type="ts_http">
+		<request><http url="/"				method="GET"/></request>
+		<request><http url="/test_me1.php"	method="GET"/></request>
+	</session>
+	<session name="unkownURL" probability="0" type="ts_http">
+		<thinktime value="%%_rndthink%%" random="true"></thinktime>
+		<request><http url="/asdfjkl"	method="GET"/></request>
+	</session>
+</sessions>
+
+</tsung>

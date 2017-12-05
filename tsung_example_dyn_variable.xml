@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/opt/local/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="notice">
+<!-- ======================================================================= -->
+<clients>
+	<client host="localhost" use_controller_vm="true" maxusers="3000"  weight="1"/>
+</clients>
+
+
+<!-- ======================================================================= -->
+<servers>
+		<server host="localhost" port="11080" type="tcp" weight="4" />
+</servers>
+
+
+
+<!-- ======================================================================= -->
+<load loop="0">
+	<arrivalphase phase="1" duration="9" unit="second">
+		<users				  arrivalrate="1" unit="second"/>
+		<session_setup name="dynVARIABLE"	probability="100"/>
+	</arrivalphase>
+</load>
+
+
+<!-- ======================================================================= -->
+<sessions>
+	<session name="dynVARIABLE" probability="0" type="ts_http">
+	<!-- setcookie( "pedtest_test_me2", $cookievalue, strtotime( '+2 minutes' ) ); -->
+		<request subst="true" >
+			<http url="/test_me2.php?id=%%ts_user_server:get_unique_id%%"	method="GET">
+				<add_cookie key="constant_Cookie" value="always_the_same_value" />
+				<add_cookie key="unique_user_cookie" value="%%ts_user_server:get_unique_id%%" />
+			</http>
+		</request>
+		<request subst="true" >
+			<http url="/test_me2.php?id=%%ts_user_server:get_unique_id%%"	method="GET">
+				<add_cookie key="unique_user_cookie" value="%%ts_user_server:get_unique_id%%" />
+			</http>
+		</request>
+		<request subst="true" >
+			<http url="/test_me2.php?id=%%ts_user_server:get_unique_id%%"	method="GET">
+				<add_cookie key="unique_user_cookie" value="%%ts_user_server:get_unique_id%%" />
+			</http>
+		</request>
+<!--		<thinktime min="1" max="3" random="true"></thinktime> -->
+	</session>
+</sessions>
+
+</tsung>

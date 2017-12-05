@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/opt/local/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="notice">
+<!-- ======================================================================= -->
+<clients>
+	<client host="localhost" use_controller_vm="true" maxusers="3000"  weight="1"/>
+</clients>
+<!-- ======================================================================= -->
+<servers>
+		<server host="localhost" port="11080" type="tcp" weight="4" />
+	<!--
+		<server host="www.google.de" port="80" type="tcp" weight="4" />
+	-->
+</servers>
+<!-- ======================================================================= -->
+<load loop="0">
+	<arrivalphase phase="1" duration="17" unit="second">
+		<users				  arrivalrate="1" unit="second"/>
+		<session_setup name="simpleHTTP"	probability="100"/>
+	</arrivalphase>
+</load>
+<!-- ======================================================================= -->
+<sessions>
+	<session name="simpleHTTP" probability="0" type="ts_http">
+		<request><http url="/"			method="GET"/></request>
+	</session>
+</sessions>
+<!-- ======================================================================= -->
+</tsung>
